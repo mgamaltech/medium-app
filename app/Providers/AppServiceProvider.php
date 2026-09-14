@@ -33,12 +33,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        DB::listen(function ($query) {
-            Log::info($query->sql, [
-                'bindings' => $query->bindings,
-                'time' => $query->time.'ms',
-            ]);
-        });
         Event::listen(
             ArticlePublished::class,
             SendAuthorNotification::class

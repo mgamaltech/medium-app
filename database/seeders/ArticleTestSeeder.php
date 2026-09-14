@@ -16,13 +16,13 @@ class ArticleTestSeeder extends Seeder
         Article::unsetEventDispatcher();
 
         $batches = [
-            ['count' => 500, 'status' => ArticleStatus::DRAFT->value, 'days' => 100],
-            ['count' => 1000, 'status' => ArticleStatus::DRAFT->value, 'days' => 30],
-            ['count' => 500, 'status' => ArticleStatus::PUBLISHED->value, 'days' => 120],
-            ['count' => 1000, 'status' => ArticleStatus::PUBLISHED->value, 'days' => 10],
+            ['count' => 10, 'status' => ArticleStatus::DRAFT->value, 'days' => 100],
+            ['count' => 10, 'status' => ArticleStatus::DRAFT->value, 'days' => 30],
+            ['count' => 10, 'status' => ArticleStatus::PUBLISHED->value, 'days' => 120],
+            ['count' => 10, 'status' => ArticleStatus::PUBLISHED->value, 'days' => 10],
         ];
 
-        $chunkSize = 1000;
+        $chunkSize = 10;
 
         foreach ($batches as $batch) {
             $chunks = (int) ceil($batch['count'] / $chunkSize);
@@ -38,7 +38,6 @@ class ArticleTestSeeder extends Seeder
                     ])
                     ->toArray();
 
-                // تحويل أي تواريخ متبقية في الـ array إلى صيغة MySQL المقبولة
                 $articles = array_map(function ($article) {
                     if (isset($article['created_at'])) {
                         $article['created_at'] = date('Y-m-d H:i:s', strtotime($article['created_at']));
