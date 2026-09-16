@@ -40,6 +40,7 @@ class ArticleRepositoryTest extends TestCase
             'title' => 'Test Article',
             'body' => 'This is a test body',
             'status' => ArticleStatus::PUBLISHED,
+            'cover_image' => 'path/to/image.jpg',
             'user_id' => $user->id,
         ];
 
@@ -114,6 +115,7 @@ class ArticleRepositoryTest extends TestCase
             'title' => 'Test Article',
             'body' => 'This is a test body',
             'status' => ArticleStatus::PUBLISHED,
+            'cover_image' => 'path/to/image.jpg',
             'user_id' => $user->id,
         ];
 

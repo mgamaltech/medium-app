@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->dropUnique(['slot_id']);
             $table->unique(['slot_id', 'status']);
         });
     }
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('bookings', function (Blueprint $table) {
             $table->dropUnique(['slot_id', 'status']);
-            $table->unique('slot_id');
         });
     }
 };

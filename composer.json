@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "aws/aws-sdk-php-laravel": "^3.11",
+        "doctrine/dbal": "^4.4",
         "guzzlehttp/guzzle": "^7.15",
         "laravel/cashier": "^16.6",
         "laravel/framework": "^12.0",

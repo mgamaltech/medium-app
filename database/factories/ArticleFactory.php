@@ -23,6 +23,7 @@ class ArticleFactory extends Factory
             'title' => $this->faker->sentence,
             'body' => $this->faker->paragraph,
             'status' => ArticleStatus::PUBLISHED,
+            'cover_image' => $this->faker->imageUrl(),
             'user_id' => User::factory(),
         ];
     }
