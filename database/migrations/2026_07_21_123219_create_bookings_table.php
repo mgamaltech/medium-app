@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default(BookingStatus::PENDING->value);
             $table->timestamps();
+
+            $table->unique('slot_id');
+
         });
     }
 
