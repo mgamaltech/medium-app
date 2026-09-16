@@ -18,7 +18,6 @@ class BookingController extends Controller
 {
     public function __construct(protected BookingService $bookingService) {}
 
-
     public function index(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -32,12 +31,13 @@ class BookingController extends Controller
         }
 
         $bookings = Booking::where('customer_id', $customer->id)
-            ->with(['slot', 'customer']) 
+            ->with(['slot', 'customer'])
             ->orderBy('created_at', 'desc')
             ->paginate();
 
         return response()->json($bookings);
     }
+
     public function store(StoreBookingRequest $request): JsonResponse
     {
         $idempotencyKey = (string) $request->header('Idempotency-Key');

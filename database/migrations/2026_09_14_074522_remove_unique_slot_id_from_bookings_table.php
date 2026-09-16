@@ -12,16 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->index('slot_id');
-            $table->dropUnique('bookings_slot_id_status_unique');
+            $table->dropForeign(['slot_id']);
+            $table->dropUnique(['slot_id']);
+        });
+
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->foreign('slot_id')->references('id')->on('slots')->cascadeOnDelete();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->unique(['slot_id', 'status'], 'bookings_slot_id_status_unique');
-            $table->dropIndex(['slot_id']);
+            $table->dropForeign(['slot_id']);
+            $table->unique('slot_id');
+        });
+
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->foreign('slot_id')->references('id')->on('slots')->cascadeOnDelete();
         });
     }
 };
