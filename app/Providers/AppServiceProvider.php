@@ -48,6 +48,5 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::policy(Article::class, ArticlePolicy::class);
         Article::observe(ArticleObserver::class);
-
     }
 }

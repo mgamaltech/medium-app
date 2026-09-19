@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Factories\ArticleFactory;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
@@ -15,12 +16,26 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
     public function __construct(protected ArticleFactory $articleFactory, protected ArticleRepositoryInterface $articleRepository) {}
+
+    public function index()
+    {
+        DB::listen(fn ($q) => logger($q->sql));
+
+        $articles = Article::published()
+            ->with('user')
+            ->withCount('comments')
+            ->latest()
+            ->paginate(20);
+
+        return ArticleResource::collection($articles);
+    }
 
     public function store(StoreArticleRequest $request)
     {

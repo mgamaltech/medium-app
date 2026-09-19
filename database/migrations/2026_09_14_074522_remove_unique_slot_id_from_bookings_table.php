@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
+            $table->dropForeign(['slot_id']);
             $table->dropUnique(['slot_id']);
-            $table->unique(['slot_id', 'status']);
+        });
+
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->foreign('slot_id')->references('id')->on('slots')->cascadeOnDelete();
         });
     }
 
@@ -23,8 +27,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->dropUnique(['slot_id', 'status']);
+            $table->dropForeign(['slot_id']);
             $table->unique('slot_id');
+        });
+
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->foreign('slot_id')->references('id')->on('slots')->cascadeOnDelete();
         });
     }
 };

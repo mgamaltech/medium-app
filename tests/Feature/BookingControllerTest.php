@@ -229,6 +229,7 @@ class BookingControllerTest extends TestCase
             'status' => BookingStatus::CANCELLED,
             'idempotency_key' => 'old-cancelled-key',
         ]);
+        $slot->update(['status' => SlotStatus::AVAILABLE]);
 
         $newUser = $this->makeUserWithCustomer();
 

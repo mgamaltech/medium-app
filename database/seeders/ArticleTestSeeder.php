@@ -13,27 +13,44 @@ class ArticleTestSeeder extends Seeder
      */
     public function run(): void
     {
-        Article::factory()->count(10)->create([
-            'status' => ArticleStatus::DRAFT,
-            'created_at' => now()->subDays(100),
-            'updated_at' => now()->subDays(100),
-        ]);
-        Article::factory()->count(5)->create([
-            'status' => ArticleStatus::DRAFT,
-            'created_at' => now()->subDays(30),
-            'updated_at' => now()->subDays(30),
-        ]);
+        Article::unsetEventDispatcher();
 
-        Article::factory()->count(5)->create([
-            'status' => ArticleStatus::PUBLISHED,
-            'created_at' => now()->subDays(120),
-            'updated_at' => now()->subDays(120),
-        ]);
+        $batches = [
+            ['count' => 10, 'status' => ArticleStatus::DRAFT->value, 'days' => 100],
+            ['count' => 10, 'status' => ArticleStatus::DRAFT->value, 'days' => 30],
+            ['count' => 10, 'status' => ArticleStatus::PUBLISHED->value, 'days' => 120],
+            ['count' => 10, 'status' => ArticleStatus::PUBLISHED->value, 'days' => 10],
+        ];
 
-        Article::factory()->count(5)->create([
-            'status' => ArticleStatus::PUBLISHED,
-            'created_at' => now()->subDays(10),
-            'updated_at' => now()->subDays(10),
-        ]);
+        $chunkSize = 10;
+
+        foreach ($batches as $batch) {
+            $chunks = (int) ceil($batch['count'] / $chunkSize);
+            $date = now()->subDays($batch['days'])->format('Y-m-d H:i:s');
+
+            for ($i = 0; $i < $chunks; $i++) {
+                $articles = Article::factory()
+                    ->count($chunkSize)
+                    ->make([
+                        'status' => $batch['status'],
+                        'created_at' => $date,
+                        'updated_at' => $date,
+                    ])
+                    ->toArray();
+
+                $articles = array_map(function ($article) {
+                    if (isset($article['created_at'])) {
+                        $article['created_at'] = date('Y-m-d H:i:s', strtotime($article['created_at']));
+                    }
+                    if (isset($article['updated_at'])) {
+                        $article['updated_at'] = date('Y-m-d H:i:s', strtotime($article['updated_at']));
+                    }
+
+                    return $article;
+                }, $articles);
+
+                Article::insert($articles);
+            }
+        }
     }
 }

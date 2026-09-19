@@ -17,6 +17,9 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @property-read int|null $followers_count
  * @property-read Collection<User> $followers
+ * @property int $id
+ * @property string $name
+ * @property string $email
  *
  * @use HasFactory<UserFactory>
  */
